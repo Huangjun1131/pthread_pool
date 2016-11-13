@@ -5,10 +5,10 @@
 #include <errno.h>
 #include <stdio.h>
 
-#ifdef D_ALL
-#define URGENCY
-#define WARING
-#define REMINDER
+#ifdef ALLPRINT
+#define D_ALLPRINT 0xffff
+#else 
+#define D_ALLPRINT 0
 #endif
 
 #ifdef URGENCY
@@ -29,11 +29,11 @@
 #define D_REMINDER 		0
 #endif
 
-#ifdef DEBUG
-	unsigned int drv_flags = 0xffff;
+#if defined(ALLPRINT) || defined(URGENCY) || defined(WARING) || defined(REMINDER)
+	unsigned int debug_print_flags = D_URGENCY | D_WARING | D_REMINDER | D_ALLPRINT;
 #define DDEBUG(flag, fmt, ...) \
 	 do{\
-		 if(drv_flags & flag){\
+		 if(debug_print_flags & flag){\
 			 printf(fmt, __VA_ARGS__);}\
 	 }while(0)
 #else
